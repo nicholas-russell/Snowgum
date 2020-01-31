@@ -69,6 +69,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Snowgum.wsgi.application'
 
+TEMPLATE = 'TRUE'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
