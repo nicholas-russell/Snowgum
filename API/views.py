@@ -1,16 +1,16 @@
-from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, HttpResponseServerError
+from django import http
 from API.models import Incidental
-from django.views.generic import View
+from django.views import generic
 from ipware import get_client_ip
 from django.core.exceptions import ValidationError
+from django.contrib.auth import authenticate, login
 
 
-class IndexView(View):
-    model = Incidental
+class IndexView(generic.View):
 
     def get(self, request):
         """Get all incidentals"""
-        qs = self.model.objects.values("pk",
+        qs = Incidental.objects.values("pk",
                                        "date_obs",
                                        "description",
                                        "loc_name",
@@ -19,7 +19,7 @@ class IndexView(View):
                                        "verified",
                                        "ts_entered",
                                        "ts_updated")
-        return JsonResponse({'data': list(qs)})
+        return http.JsonResponse({'data': list(qs)})
 
     def post(self, request):
         """Creates a new incidental"""
@@ -31,7 +31,7 @@ class IndexView(View):
             else:
                 new.date_obs = data.get('date_obs')
         except ValidationError as err:
-            return HttpResponseBadRequest(err)
+            return http.HttpResponseBadRequest(err)
 
         if data.get('description') is not None:
             new.description = data.get('description')
@@ -50,6 +50,58 @@ class IndexView(View):
         try:
             new.save()
         except RuntimeError:
-            return HttpResponseServerError()
+            return http.HttpResponseServerError()
         finally:
-            return HttpResponse("Success")
+            return http.HttpResponse("Success")
+
+
+class DetailView(generic.View):
+    def get(self, request, inc_id):
+        """Get detail of individual incidental"""
+        try:
+            obj = Incidental.objects.values("pk",
+                                            "date_obs",
+                                            "description",
+                                            "loc_name",
+                                            "loc_lat",
+                                            "loc_long",
+                                            "verified",
+                                            "ts_entered",
+                                            "ts_updated").get(pk=inc_id)
+        except Incidental.DoesNotExist:
+            return http.HttpResponseNotFound()
+        return http.JsonResponse({'data': obj})
+
+    # def put(self, request, inc_id):
+    #    """Update incidental"""
+    #    try:
+    #        obj = Incidental.objects.get(pk=inc_id)
+    #    except Incidental.DoesNotExist:
+    #        return http.HttpResponseNotFound()
+    #    print(obj)
+    #    return http.HttpResponse("Test")
+
+    # def delete(self, request, inc_id):
+    #    """Delete incidental"""
+
+
+class AuthView(generic.View):
+    def get(self, request):
+        """Gets user authentication status"""
+        if request.user.is_authenticated:
+            return http.HttpResponse("True")
+        else:
+            return http.HttpResponseForbidden("False")
+
+    def post(self, request):
+        """Logs user in """
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if username is None or password is None:
+            return http.HttpResponseBadRequest("Username or password is missing.")
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return http.HttpResponse("Success")
+        else:
+            return http.HttpResponseBadRequest("Not success")

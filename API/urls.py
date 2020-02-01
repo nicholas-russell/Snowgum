@@ -16,5 +16,7 @@ from django.urls import path, include
 
 app_name = 'api'
 urlpatterns = [
-    path('inc/', views.IndexView.as_view())
+    path('inc/', views.IndexView.as_view()),
+    path('inc/<int:inc_id>', views.DetailView.as_view()),
+    path('auth/', views.AuthView.as_view())
 ]

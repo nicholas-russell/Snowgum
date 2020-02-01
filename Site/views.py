@@ -30,3 +30,8 @@ def gallery(request):
 @require_http_methods(['GET'])
 def contact(request):
     return render(request, 'site/contact.html')
+
+
+@require_http_methods(['GET'])
+def report(request):
+    return render(request, 'site/report.html')
