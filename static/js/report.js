@@ -1,3 +1,5 @@
+// TODO: refactor GPS long or lon to lng
+
 const app = {}
 
 /**

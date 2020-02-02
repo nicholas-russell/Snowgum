@@ -15,7 +15,7 @@ class IndexView(generic.View):
                                        "description",
                                        "loc_name",
                                        "loc_lat",
-                                       "loc_long",
+                                       "loc_lng",
                                        "verified",
                                        "ts_entered",
                                        "ts_updated")
@@ -39,7 +39,7 @@ class IndexView(generic.View):
             new.loc_name = data.get('loc_name')
         if data.get('loc_lat') is not None:
             new.loc_lat = data.get('loc_lat')
-        if data.get('loc_long') is not None:
+        if data.get('loc_lng') is not None:
             new.loc_long = data.get('loc_long')
         if data.get('email') is not None:
             new.email = data.get('email')
@@ -64,7 +64,7 @@ class DetailView(generic.View):
                                             "description",
                                             "loc_name",
                                             "loc_lat",
-                                            "loc_long",
+                                            "loc_lng",
                                             "verified",
                                             "ts_entered",
                                             "ts_updated").get(pk=inc_id)
