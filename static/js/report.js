@@ -80,6 +80,8 @@ function getFormData() {
     data.append('description', app.view.form.description.val());
     data.append('email', app.view.form.email.val());
     data.append('contact', app.view.form.contact.is(':checked'));
+    data.append('image', app.view.form.photo[0].files[0]);
+    data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
     return data;
 }
 
@@ -163,8 +165,27 @@ $(document).ready(function() {
         e.preventDefault();
         let data = getFormData();
         for (var key of data.keys()) {
-            console.log(key + ": " + data.get(key));
+            console.log("[DEBUG] " + key + ": " + data.get(key));
         }
+        $.ajax({
+            type: "post",
+            url: $('meta[name=api-endpoint]').attr('content'),
+            processData: false,
+            data: data,
+            contentType: false,
+            beforeSend: function(req) {
+                console.log(req);
+            },
+            success: function(res) {
+                console.log(res);
+            },
+            done: function() {
+
+            },
+            error: function(res) {
+                console.log(res);
+            }
+        });
         return false;
     })
 });

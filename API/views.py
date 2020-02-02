@@ -13,7 +13,6 @@ class IndexView(generic.View):
         qs = Incidental.objects.values("pk",
                                        "date_obs",
                                        "description",
-                                       "loc_name",
                                        "loc_lat",
                                        "loc_lng",
                                        "verified",
@@ -35,12 +34,10 @@ class IndexView(generic.View):
 
         if data.get('description') is not None:
             new.description = data.get('description')
-        if data.get('loc_name') is not None:
-            new.loc_name = data.get('loc_name')
         if data.get('loc_lat') is not None:
             new.loc_lat = data.get('loc_lat')
         if data.get('loc_lng') is not None:
-            new.loc_long = data.get('loc_long')
+            new.loc_lng = data.get('loc_lng')
         if data.get('email') is not None:
             new.email = data.get('email')
         ip, is_routable = get_client_ip(request)
@@ -62,7 +59,6 @@ class DetailView(generic.View):
             obj = Incidental.objects.values("pk",
                                             "date_obs",
                                             "description",
-                                            "loc_name",
                                             "loc_lat",
                                             "loc_lng",
                                             "verified",

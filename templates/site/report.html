@@ -1,6 +1,8 @@
 {% extends "includes/base.html" %}
 {% load static %}
-
+{% block meta %}
+    <meta name="api-endpoint" content="{% url 'api:inc' %}"/>
+{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-6">
@@ -11,6 +13,7 @@
         <div class="col-6">
             <p>An image is required for verification and for the incidental to be added to the data.</p>
             <form id="reportForm">
+                {% csrf_token %}
                 <div class="form-group row mb-0">
                     <label for="form-photo" class="col-4 col-form-label"><strong>Upload image</strong></label>
                     <div class="col-8">
