@@ -4,11 +4,9 @@ from django.views import generic
 from ipware import get_client_ip
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate, login
-from django.core.files.storage import FileSystemStorage
-import uuid
+
 
 class IndexView(generic.View):
-
     def get(self, request):
         """Get all incidentals"""
         qs = Incidental.objects.values("pk",
@@ -18,7 +16,8 @@ class IndexView(generic.View):
                                        "loc_lng",
                                        "verified",
                                        "ts_entered",
-                                       "ts_updated")
+                                       "ts_updated",
+                                       "image")
         return http.JsonResponse({'data': list(qs)})
 
     def post(self, request):
@@ -41,19 +40,22 @@ class IndexView(generic.View):
             new.loc_lng = data.get('loc_lng')
         if data.get('email') is not None:
             new.email = data.get('email')
+        if data.get('contact') is not None:
+            if data.get('contact') == 'true':
+                new.contact = True
         ip, is_routable = get_client_ip(request)
         if ip is not None:
             new.entered_IP = ip
 
         if request.FILES.get('image') is not None:
-            new.image_ids = request.FILES.get('image')
+            new.image = request.FILES.get('image')
 
         try:
             new.save()
         except RuntimeError:
             return http.HttpResponseServerError()
         finally:
-            return http.HttpResponse("Success")
+            return http.JsonResponse({'success': True, 'id': new.id})
 
 
 class DetailView(generic.View):
