@@ -172,7 +172,7 @@ $(document).ready(function() {
             url: $('meta[name=api-endpoint]').attr('content'),
             processData: false,
             data: data,
-            contentType: "multipart/form-data",
+            contentType: false,
             beforeSend: function(req) {
                 req.setRequestHeader('csrfmiddlewaretoken', data.get('csrfmiddlewaretoken'));
             },
