@@ -12,7 +12,7 @@
             <p>An image is required for verification and for the incidental to be added to the data.</p>
             <form id="reportForm">
                 <div class="form-group row mb-0">
-                    <label for="form-photo" class="col-4 col-form-label"><strong>Step 1: </strong>Upload image</label>
+                    <label for="form-photo" class="col-4 col-form-label"><strong>Upload image</strong></label>
                     <div class="col-8">
                         <input id="form-photo" name="form-file" type="file" aria-describedby="form-fileHelpBlock" multiple="multiple" required="required" class="form-control-file" accept="image/jpeg, image/png">
                         <span id="form-photoHelpBlock" class="sr-only form-text text-muted">Upload a photo of the occurence</span>
@@ -25,6 +25,13 @@
                         <span id="form-dateHelpBlock" class="sr-only form-text text-muted">Enter the date you observed the occurrence</span>
                     </div>
                 </div>
+                <div class="form-group row mb-0 mt-3 d-none" id="location-search">
+                    <label for="form-location" class="col-4 col-form-label">Location Search</label>
+                    <div class="col-8">
+                        <input id="form-location" name="form-location" type="text" class="form-control form-control-sm" aria-describedby="form-locationHelpBlock">
+                        <span id="form-locationHelpBlock" class="sr-only form-text text-muted">Search for location to get GPS details</span>
+                    </div>
+                </div>
                 <div class="form-group row mb-0">
                     <label for="form-lat" class="col-4 col-form-label">Latitude</label>
                     <div class="col-8">
@@ -35,13 +42,6 @@
                     <label for="form-lon" class="col-4 col-form-label">Longitude</label>
                     <div class="col-8">
                         <input id="form-lon" name="form-lon" type="number" disabled required="required" class="form-control-plaintext" placeholder="0.000000"/>
-                    </div>
-                </div>
-                <div class="form-group row d-none">
-                    <label for="form-location" class="col-4 col-form-label">Location</label>
-                    <div class="col-8">
-                        <input id="form-location" name="form-location" type="text" class="form-control no-photo-disable" aria-describedby="form-locationHelpBlock">
-                        <span id="form-locationHelpBlock" class="form-text text-muted">The location of the occurrence</span>
                     </div>
                 </div>
                 <div class="form-group row">

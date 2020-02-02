@@ -77,6 +77,9 @@ $(document).ready(function() {
             date: $('#form-date'),
             lon: $('#form-lon'),
             lat: $('#form-lat'),
+            loc_search: $('#form-location'),
+            loc_search_container: $('#location-search'),
+            enableFields: function() {$('.no-photo-disable').prop('disabled', false)},
             disableFields: function() {$('.no-photo-disable').prop('disabled', true)},
             clearFields: function() {
                 app.view.form.date.val('');
@@ -90,6 +93,19 @@ $(document).ready(function() {
         dateFormat: "yy-mm-dd"
     });
 
+    app.view.form.loc_autocomplete = new google.maps.places.Autocomplete(app.view.form.loc_search[0], {
+        types: ['geocode'],
+        componentRestrictions: {country: 'au'}
+    });
+
+    google.maps.event.addListener(app.view.form.loc_autocomplete, 'place_changed', function() {
+        if (!app.view.form.loc_search_container.hasClass('d-none')) {
+            let place = app.view.form.loc_autocomplete.getPlace();
+            app.view.form.lat.val(place.geometry.location.lat());
+            app.view.form.lon.val(place.geometry.location.lng());
+        }
+    });
+
     if (app.view.form.photo.get(0).files.length === 0) {
         app.view.form.disableFields()
     }
@@ -97,10 +113,13 @@ $(document).ready(function() {
     app.view.form.photo.on('change', function(e) {
         if (app.view.form.photo.get(0).files.length === 0) {
             app.view.form.disableFields();
-            app.view.form.clearFields()
+            app.view.form.clearFields();
+            app.view.form.loc_search_container.addClass('d-none');
         } else {
             let file = e.target.files[0];
-            app.view.form.clearFields()
+            app.view.form.loc_search_container.addClass('d-none');
+            app.view.form.clearFields();
+            app.view.form.enableFields();
             EXIF.getData(file, function() {
                 let data = this.exifdata;
                 // Check if it has Date/Time
@@ -112,7 +131,11 @@ $(document).ready(function() {
                     if (!gps.error) {
                         app.view.form.lat.val(gps.lat);
                         app.view.form.lon.val(gps.lon);
+                    } else {
+                        app.view.form.loc_search_container.removeClass('d-none');
                     }
+                } else {
+                    app.view.form.loc_search_container.removeClass('d-none');
                 }
             });
         }
