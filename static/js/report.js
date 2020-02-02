@@ -174,7 +174,7 @@ $(document).ready(function() {
             data: data,
             contentType: false,
             beforeSend: function(req) {
-                console.log(req);
+                req.setRequestHeader('csrfmiddlewaretoken', data.get('csrfmiddlewaretoken'));
             },
             success: function(res) {
                 console.log(res);
