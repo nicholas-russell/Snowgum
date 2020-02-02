@@ -70,15 +70,31 @@ function getGPSFromEXIF(exifData) {
     return rtn;
 }
 
+function getFormData() {
+    let data = new FormData();
+    data.append('date_obs', app.view.form.date.val());
+    data.append('loc_lat', app.view.form.lat.val());
+    data.append('loc_lng', app.view.form.lon.val());
+    data.append('description', app.view.form.description.val());
+    data.append('email', app.view.form.email.val());
+    data.append('contact', app.view.form.contact.is(':checked'));
+    return data;
+}
+
 $(document).ready(function() {
     app.view = {
         form: {
+            container: $('#reportForm'),
             photo: $('#form-photo'),
             date: $('#form-date'),
             lon: $('#form-lon'),
             lat: $('#form-lat'),
+            description: $('#form-description'),
+            email: $('#form-email'),
+            contact: $('#form-agree'),
             loc_search: $('#form-location'),
             loc_search_container: $('#location-search'),
+            submit: $('#form-submit'),
             enableFields: function() {$('.no-photo-disable').prop('disabled', false)},
             disableFields: function() {$('.no-photo-disable').prop('disabled', true)},
             clearFields: function() {
@@ -139,5 +155,14 @@ $(document).ready(function() {
                 }
             });
         }
+    })
+
+    app.view.form.container.on('submit', function(e) {
+        e.preventDefault();
+        let data = getFormData();
+        for (var key of data.keys()) {
+            console.log(key + ": " + data.get(key));
+        }
+        return false;
     })
 });
