@@ -8,7 +8,7 @@ class Incidental(models.Model):
     loc_lat = models.DecimalField(decimal_places=6, max_digits=9, blank=True, null=True)
     loc_lng = models.DecimalField(decimal_places=6, max_digits=9, blank=True, null=True)
     image_apr = models.BooleanField(default=False)
-    image_ids = models.ImageField(upload_to=RandomFileName('uploaded_images'), blank=True, null=True)
+    image = models.ImageField(upload_to=RandomFileName('uploaded_images'), blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     contact = models.BooleanField(default=False)
     verified = models.BooleanField(default=False)
