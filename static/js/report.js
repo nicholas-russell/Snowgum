@@ -175,13 +175,24 @@ $(document).ready(function() {
             contentType: false,
             beforeSend: function(req) {
                 req.setRequestHeader('csrfmiddlewaretoken', data.get('csrfmiddlewaretoken'));
+                app.view.form.submit.prop('disabled', true);
+                app.view.form.photo.prop('disabled', true);
+                app.view.form.disableFields();
+                app.view.form.submit.find('span').removeClass('d-none');
+                app.view.form.submit.text('Uploading');
             },
             success: function(res) {
-                console.log(res);
-                window.location.replace(res.redirect);
+                app.view.form.submit.find('span').addClass('d-none');
+                app.view.form.submit.text('Success');
+                //window.location.replace(res.redirect);
             },
             error: function(res) {
                 console.error(res);
+                app.view.form.submit.prop('disabled', false);
+                app.view.form.photo.prop('disabled', false);
+                app.view.form.enableFields();
+                app.view.form.submit.find('span').addClass('d-none');
+                app.view.form.submit.text('Submit');
             }
         });
         return false;
