@@ -9,56 +9,68 @@
             <p>Information here about how to identify.... Etc etc</p>
         </div>
         <div class="col-6">
-            <form>
-                <div class="form-group row">
-                    <label for="form-photo" class="col-4 col-form-label">Images</label>
+            <p>An image is required for verification and for the incidental to be added to the data.</p>
+            <form id="reportForm">
+                <div class="form-group row mb-0">
+                    <label for="form-photo" class="col-4 col-form-label"><strong>Step 1: </strong>Upload image</label>
                     <div class="col-8">
                         <input id="form-photo" name="form-file" type="file" aria-describedby="form-fileHelpBlock" multiple="multiple" required="required" class="form-control-file" accept="image/jpeg, image/png">
-                        <span id="form-photoHelpBlock" class="form-text text-muted">Upload a photo of the occurence</span>
+                        <span id="form-photoHelpBlock" class="sr-only form-text text-muted">Upload a photo of the occurence</span>
+                    </div>
+                </div>
+                <div class="form-group row mb-0">
+                    <label for="form-date" class="col-4 col-form-label">Date</label>
+                    <div class="col-8">
+                        <input id="form-date" name="form-date" type="text" aria-describedby="form-dateHelpBlock" required="required" class="form-control-plaintext no-photo-disable" placeholder="yyyy-mm-dd">
+                        <span id="form-dateHelpBlock" class="sr-only form-text text-muted">Enter the date you observed the occurrence</span>
+                    </div>
+                </div>
+                <div class="form-group row mb-0">
+                    <label for="form-lat" class="col-4 col-form-label">Latitude</label>
+                    <div class="col-8">
+                        <input id="form-lat" name="form-lat" type="number" disabled required="required" class="form-control-plaintext" placeholder="0.000000"/>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="form-date" class="col-4 col-form-label">Date</label>
+                    <label for="form-lon" class="col-4 col-form-label">Longitude</label>
                     <div class="col-8">
-                        <input id="form-date" name="form-date" type="text" aria-describedby="form-dateHelpBlock" required="required" class="form-control">
-                        <span id="form-dateHelpBlock" class="form-text text-muted">Enter the date you observed the occurence</span>
+                        <input id="form-lon" name="form-lon" type="number" disabled required="required" class="form-control-plaintext" placeholder="0.000000"/>
                     </div>
                 </div>
-              <div class="form-group row">
-                <label for="form-description" class="col-4 col-form-label">Description</label>
-                <div class="col-8">
-                  <textarea id="form-description" name="form-description" cols="40" rows="2" aria-describedby="form-descriptionHelpBlock" class="form-control"></textarea>
-                  <span id="form-descriptionHelpBlock" class="form-text text-muted">Enter any details about the observance</span>
+                <div class="form-group row d-none">
+                    <label for="form-location" class="col-4 col-form-label">Location</label>
+                    <div class="col-8">
+                        <input id="form-location" name="form-location" type="text" class="form-control no-photo-disable" aria-describedby="form-locationHelpBlock">
+                        <span id="form-locationHelpBlock" class="form-text text-muted">The location of the occurrence</span>
+                    </div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label for="form-location" class="col-4 col-form-label">Location</label>
-                <div class="col-8">
-                  <input id="form-location" name="form-location" type="text" class="form-control" aria-describedby="form-locationHelpBlock">
-                  <span id="form-locationHelpBlock" class="form-text text-muted">The location of the occurrence</span>
+                <div class="form-group row">
+                    <label for="form-description" class="col-4 col-form-label">Description</label>
+                    <div class="col-8">
+                        <textarea id="form-description" name="form-description" cols="40" rows="2" aria-describedby="form-descriptionHelpBlock" class="form-control no-photo-disable"></textarea>
+                        <span id="form-descriptionHelpBlock" class="form-text text-muted">Enter any details about the observance</span>
+                    </div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label for="text1" class="col-4 col-form-label">Email</label>
-                <div class="col-8">
-                  <input id="text1" name="text1" type="text" class="form-control" aria-describedby="text1HelpBlock">
-                  <span id="text1HelpBlock" class="form-text text-muted">If you would like to be contacted please provide your email address</span>
+                <div class="form-group row">
+                    <label for="form-email" class="col-4 col-form-label">Email</label>
+                    <div class="col-8">
+                        <input id="form-email" placeholder="name@email.com" name="form-email" type="email" class="form-control no-photo-disable" aria-describedby="form-emailHelpBlock">
+                        <span id="form-emailHelpBlock" class="form-text text-muted">If you would like to be contacted please provide your email address</span>
+                    </div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <div class="col-4"></div>
-                <div class="col-8">
-                  <div class="custom-control custom-checkbox custom-control-inline">
-                    <input name="checkbox" id="checkbox_0" type="checkbox" class="custom-control-input" value="true" checked="checked">
-                    <label for="checkbox_0" class="custom-control-label">I agree to be contacted about this</label>
-                  </div>
+                <div class="form-group row">
+                    <div class="offset-4 col-8">
+                        <div class="custom-control custom-checkbox custom-control-inline">
+                            <input name="checkbox" id="checkbox_0" type="checkbox" class="custom-control-input no-photo-disable" value="true" checked="checked">
+                            <label for="checkbox_0" class="custom-control-label">I agree to be contacted about this</label>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <div class="offset-4 col-8">
-                  <button name="submit" type="submit" class="btn btn-primary">Submit</button>
+                <div class="form-group row">
+                    <div class="offset-4 col-8">
+                        <button name="submit" type="submit" class="btn btn-primary no-photo-disable">Submit</button>
+                    </div>
                 </div>
-              </div>
             </form>
         </div>
     </div>

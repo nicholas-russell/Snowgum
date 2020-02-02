@@ -1,10 +1,16 @@
-var app = {}
+const app = {}
 
 /**
- * @return {number}
+ * Converts GPS DMS to decimal
+ * Credit: https://awik.io/extract-gps-location-exif-data-photos-using-javascript/
+ * @param degrees Degrees angle
+ * @param minutes Minutes angle
+ * @param seconds Seconds angle
+ * @param direction The direction (N,S,E,W)
+ * @return {number} A GPS decimal
  */
 function ConvertDMSToDD(degrees, minutes, seconds, direction) {
-    var dd = degrees + (minutes/60) + (seconds/3600);
+    let dd = degrees + (minutes/60) + (seconds/3600);
 
     if (direction === "S" || direction === "W") {
         dd = dd * -1;
@@ -12,44 +18,103 @@ function ConvertDMSToDD(degrees, minutes, seconds, direction) {
     return parseFloat(dd.toFixed(6));
 }
 
+/**
+ * Converts datetime from EXIF (yyyy:mm:dd hh:mm:ss) to ISO date (yyyy-mm-dd)
+ * @param exifDate A datetime from EXIF metadata
+ * @return {string} A date string
+ */
+function ConvertEXIFDateToISO(exifDate) {
+    let fDate = exifDate.substr(0,10)
+    return fDate.replace(new RegExp(':', 'g'), "-")
+}
+
+/**
+ * Checks if an object has all properties (used to check GPS EXIF)
+ * Credit: https://stackoverflow.com/a/48653724
+ * @param obj The object to check
+ * @param props An array of properties to check
+ * @returns {boolean} True if all are present
+ */
+function hasAllProperties(obj, props) {
+    for (var i = 0; i < props.length; i++) {
+        if (!obj.hasOwnProperty(props[i]))
+            return false;
+    }
+    return true;
+}
+
+/**
+ * Returns GPS decimals given EXIF Data
+ * @param exifData EXIF Data
+ * @returns {{lon: null, error: boolean, lat: null, errormsg: null}} Object with lat/lon or an error
+ */
+function getGPSFromEXIF(exifData) {
+    let rtn = {lat: null, lon: null, error: false, errormsg: null}
+    try {
+        let latDegree = exifData.GPSLatitude[0].numerator/exifData.GPSLatitude[0].denominator;
+        let latMinute = exifData.GPSLatitude[1].numerator/exifData.GPSLatitude[1].denominator;
+        let latSecond = exifData.GPSLatitude[2].numerator/exifData.GPSLatitude[2].denominator;
+        let latDirection = exifData.GPSLatitudeRef;
+
+        let longDegree = exifData.GPSLongitude[0].numerator/exifData.GPSLongitude[0].denominator;
+        let longMinute = exifData.GPSLongitude[1].numerator/exifData.GPSLongitude[1].denominator;
+        let longSecond = exifData.GPSLongitude[2].numerator/exifData.GPSLongitude[2].denominator;
+        let longDirection = exifData.GPSLongitudeRef;
+
+        rtn.lat = ConvertDMSToDD(latDegree, latMinute, latSecond, latDirection);
+        rtn.lon = ConvertDMSToDD(longDegree, longMinute, longSecond, longDirection);
+    } catch(error) {
+        rtn.error = true;
+        rtn.errormsg = error;
+    }
+    return rtn;
+}
+
 $(document).ready(function() {
-    $('#form-date').datepicker({
+    app.view = {
+        form: {
+            photo: $('#form-photo'),
+            date: $('#form-date'),
+            lon: $('#form-lon'),
+            lat: $('#form-lat'),
+            disableFields: function() {$('.no-photo-disable').prop('disabled', true)},
+            clearFields: function() {
+                app.view.form.date.val('');
+                app.view.form.lat.val('');
+                app.view.form.lon.val('');
+            }
+        }
+    };
+
+    app.view.form.date.datepicker({
         dateFormat: "yy-mm-dd"
     });
-    var input = document.getElementById("form-location")
-    var options = {
-        types: ['geocode'],
-        componentRestrictions: {country: 'au'}
-    };
-    app.autocomplete = new google.maps.places.Autocomplete(input, options);
-    google.maps.event.addListener(app.autocomplete, 'place_changed', function() {
-        var place = app.autocomplete.getPlace();
-        console.log(place.geometry.location.lat())
-        console.log(place.geometry.location.lng())
-    });
 
-    document.getElementById("form-photo").onchange = function(e) {
-        var file = e.target.files[0]
-        if (file && file.name) {
+    if (app.view.form.photo.get(0).files.length === 0) {
+        app.view.form.disableFields()
+    }
+
+    app.view.form.photo.on('change', function(e) {
+        if (app.view.form.photo.get(0).files.length === 0) {
+            app.view.form.disableFields();
+            app.view.form.clearFields()
+        } else {
+            let file = e.target.files[0];
+            app.view.form.clearFields()
             EXIF.getData(file, function() {
-                var data = this.exifdata;
-                var date = data.DateTime.substr(0,10)
-                $('#form-date').val(date.replace(new RegExp(':', 'g'), "-"))
-                var latDegree = data.GPSLatitude[0].numerator/data.GPSLatitude[0].denominator;
-                var latMinute = data.GPSLatitude[1].numerator/data.GPSLatitude[1].denominator;
-                var latSecond = data.GPSLatitude[2].numerator/data.GPSLatitude[2].denominator;
-                var latDirection = data.GPSLatitudeRef;
-                
-                var longDegree = data.GPSLongitude[0].numerator/data.GPSLongitude[0].denominator;
-                var longMinute = data.GPSLongitude[1].numerator/data.GPSLongitude[1].denominator;
-                var longSecond = data.GPSLongitude[2].numerator/data.GPSLongitude[2].denominator;
-                var longDirection = data.GPSLongitudeRef;
-
-                var lat = ConvertDMSToDD(latDegree, latMinute, latSecond, latDirection);
-                var lon = ConvertDMSToDD(longDegree, longMinute, longSecond, longDirection);
-                console.log(lat);
-                console.log(lon);
+                let data = this.exifdata;
+                // Check if it has Date/Time
+                if (data.hasOwnProperty('DateTime')) {
+                    app.view.form.date.val(ConvertEXIFDateToISO(data.DateTime))
+                }
+                if (hasAllProperties(data, ['GPSLatitude','GPSLatitudeRef','GPSLongitude','GPSLongitudeRef'])) {
+                    let gps = getGPSFromEXIF(data)
+                    if (!gps.error) {
+                        app.view.form.lat.val(gps.lat);
+                        app.view.form.lon.val(gps.lon);
+                    }
+                }
             });
         }
-    }
+    })
 });
