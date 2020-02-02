@@ -1,10 +1,6 @@
-from django.shortcuts import render
-from django.http import HttpResponse
 from API.models import Incidental
-from django.core import serializers
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
-from django.conf import settings
 
 
 @require_http_methods(['GET'])
@@ -35,3 +31,13 @@ def contact(request):
 @require_http_methods(['GET'])
 def report(request):
     return render(request, 'site/report.html')
+
+
+class IncView:
+    @require_http_methods(['GET'])
+    def index(request):
+        return render(request, 'site/inc/index.html')
+
+    @require_http_methods(['GET'])
+    def detail(request, inc_id):
+        return render(request, 'site/inc/detail.html')

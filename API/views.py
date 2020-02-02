@@ -56,7 +56,7 @@ class IndexView(generic.View):
         except RuntimeError:
             return http.HttpResponseServerError()
         finally:
-            return http.JsonResponse({'redirect': reverse('api:inc_det', args=(new.id,))})
+            return http.JsonResponse({'redirect': reverse('site:inc_detail', args=(new.id,))})
 
 
 
