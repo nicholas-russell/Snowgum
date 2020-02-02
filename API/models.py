@@ -4,7 +4,7 @@ from django.db import models
 class Incidental(models.Model):
     date_obs = models.DateField()
     description = models.TextField(null=True)
-    loc_name = models.CharField(max_length=255, blank=True)
+    # loc_name = models.CharField(max_length=255, blank=True)
     loc_lat = models.DecimalField(decimal_places=6, max_digits=9, blank=True, null=True)
     loc_long = models.DecimalField(decimal_places=6, max_digits=9, blank=True, null=True)
     image_apr = models.BooleanField(default=False)

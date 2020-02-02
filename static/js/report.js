@@ -33,7 +33,8 @@ $(document).ready(function() {
         if (file && file.name) {
             EXIF.getData(file, function() {
                 var data = this.exifdata;
-
+                var date = data.DateTime.substr(0,10)
+                $('#form-date').val(date.replace(new RegExp(':', 'g'), "-"))
                 var latDegree = data.GPSLatitude[0].numerator/data.GPSLatitude[0].denominator;
                 var latMinute = data.GPSLatitude[1].numerator/data.GPSLatitude[1].denominator;
                 var latSecond = data.GPSLatitude[2].numerator/data.GPSLatitude[2].denominator;
