@@ -184,7 +184,7 @@ $(document).ready(function() {
             success: function(res) {
                 app.view.form.submit.find('span').addClass('d-none');
                 app.view.form.submit.text('Success');
-                //window.location.replace(res.redirect);
+                window.location.replace(res.redirect);
             },
             error: function(res) {
                 console.error(res);
