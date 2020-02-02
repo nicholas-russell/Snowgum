@@ -15,9 +15,9 @@
             <form id="reportForm">
                 {% csrf_token %}
                 <div class="form-group row mb-0">
-                    <label for="form-photo" class="col-4 col-form-label"><strong>Upload image</strong></label>
+                    <label for="form-photo" class="col-4 col-form-label"><strong>Upload image*</strong></label>
                     <div class="col-8">
-                        <input id="form-photo" name="form-file" type="file" aria-describedby="form-fileHelpBlock" multiple="multiple" required="required" class="form-control-file" accept="image/jpeg, image/png">
+                        <input id="form-photo" name="form-file" type="file" aria-describedby="form-fileHelpBlock" required="required" class="form-control-file" accept="image/jpeg, image/png">
                         <span id="form-photoHelpBlock" class="sr-only form-text text-muted">Upload a photo of the occurence</span>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
                 <div class="form-group row">
                     <div class="offset-4 col-8">
                         <div class="custom-control custom-checkbox custom-control-inline">
-                            <input name="form-agree" id="form-agree" type="checkbox" class="custom-control-input no-photo-disable" value="true" checked="checked">
+                            <input name="form-agree" id="form-agree" type="checkbox" class="custom-control-input no-photo-disable" value="false">
                             <label for="form-agree" class="custom-control-label">I agree to be contacted about this</label>
                         </div>
                     </div>
