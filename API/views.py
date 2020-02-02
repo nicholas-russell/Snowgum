@@ -4,6 +4,7 @@ from django.views import generic
 from ipware import get_client_ip
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate, login
+from django.urls import reverse
 
 
 class IndexView(generic.View):
@@ -55,7 +56,8 @@ class IndexView(generic.View):
         except RuntimeError:
             return http.HttpResponseServerError()
         finally:
-            return http.JsonResponse({'success': True, 'id': new.id})
+            return http.JsonResponse({'redirect': reverse('api:inc_det', args=(new.id,))})
+
 
 
 class DetailView(generic.View):
@@ -69,7 +71,8 @@ class DetailView(generic.View):
                                             "loc_lng",
                                             "verified",
                                             "ts_entered",
-                                            "ts_updated").get(pk=inc_id)
+                                            "ts_updated",
+                                            "image").get(pk=inc_id)
         except Incidental.DoesNotExist:
             return http.HttpResponseNotFound()
         return http.JsonResponse({'data': obj})

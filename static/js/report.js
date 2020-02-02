@@ -178,12 +178,10 @@ $(document).ready(function() {
             },
             success: function(res) {
                 console.log(res);
-            },
-            done: function() {
-
+                window.location.replace(res.redirect);
             },
             error: function(res) {
-                console.log(res);
+                console.error(res);
             }
         });
         return false;
