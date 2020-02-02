@@ -4,7 +4,8 @@ from django.views import generic
 from ipware import get_client_ip
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate, login
-
+from django.core.files.storage import FileSystemStorage
+import uuid
 
 class IndexView(generic.View):
 
@@ -43,6 +44,9 @@ class IndexView(generic.View):
         ip, is_routable = get_client_ip(request)
         if ip is not None:
             new.entered_IP = ip
+
+        if request.FILES.get('image') is not None:
+            new.image_ids = request.FILES.get('image')
 
         try:
             new.save()
