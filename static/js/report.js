@@ -187,6 +187,7 @@ $(document).ready(function() {
                 window.location.replace(res.redirect);
             },
             error: function(res) {
+                // TODO: add better error handling here
                 console.error(res);
                 app.view.form.submit.prop('disabled', false);
                 app.view.form.photo.prop('disabled', false);

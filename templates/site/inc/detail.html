@@ -1,58 +1,89 @@
 {% extends "includes/base.html" %}
+{% load static %}
+{% block meta %}
+    {% if user.is_authenticated %}
+        <meta name="api-endpoint-apr-img" content="{% url 'api:inc_apr_img' data.id %}"/>
+        <meta name="api-endpoint-verify" content="{% url 'api:inc_verify' data.id %}"/>
+    {% endif %}
+{% endblock %}
 {% block content %}
 <div class="row">
     <div class="col-6">
         <div class="card">
-            <div class="card-header">
-                <h5 class="m-0"><strong>Observation #{{ data.id }}</strong></h5>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="m-0 d-flex align-items-center">
+                    Observation #{{ data.id }}
+                    {% if data.verified %}
+                        <span class="ml-1 badge badge-success" id="verified-badge">Verified</span>
+                    {% else %}
+                        <span class="badge badge-warning" id="verified-badge">Unverified</span>
+                    {% endif %}
+                </h5>
+                {% if user.is_authenticated %}
+                    {% csrf_token %}
+                    <div>
+                        <button class="btn btn-sm btn-primary" id="btn-verify">
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            {% if data.verified %}
+                                Un-verify
+                            {% else %}
+                                Verify
+                            {% endif %}
+                        </button>
+                        <button class="btn btn-sm btn-success" id="btn-apr-img">
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            {% if data.image_apr %}
+                                Un-approve Image
+                            {% else %}
+                                Approve Image
+                            {% endif %}
+                        </button>
+                    </div>
+                {% endif%}
             </div>
             <div class="card-body">
-                <p><strong>Date Observed: </strong>{{ data.date_obs }}</p>
-                <p><strong>Submitted: </strong>{{ data.ts_entered|date:"g:i:sA D d/m/y" }}</p>
-                <p><strong>Description: </strong> {{ data.description }}</p>
-                <p>
-                    <strong>Verified: </strong>
-                    {{ data.verified }}
-                    {% if data.verified %}
-                    ({{ data.verified_by }})
-                    {% endif %}
-                </p>
+                <p><strong>Date Observed: </strong>{{ data.date_obs|date:"D d/m/y" }}</p>
+                <p><strong>Submitted: </strong>{{ data.ts_entered|date:"g:iA d/m/y" }}</p>
+                {% if data.description %}
+                    <p><strong>Description: </strong> {{ data.description }}</p>
+                {% endif %}
                 {% if user.is_authenticated %}
-                <p><strong>Email: </strong>{{ data.email }} ({{ data.contact }})</p>
-                <p><strong>IP Address: </strong>{{ data.entered_IP }}</p>
+                    {% if data.email %}
+                        <p><strong>Email: </strong>{{ data.email }} (contact: {{ data.contact }})</p>
+                    {% endif %}
                 {% endif %}
                 <p><strong>Location: </strong>{{ data.loc_lat }}, {{ data.loc_lng }}</p>
-                <div id="detail-map"></div>
+                <div id="detail-map" data-lat="{{ data.loc_lat }}" data-lng="{{ data.loc_lng }}"></div>
             </div>
         </div>
     </div>
     <div class="col-6">
+    {% if data.image %}
         {% if data.image_apr %}
             <img src="{{ MEDIA_URL }}{{ data.image }}" class="img-fluid img-thumbnail img-resize" alt="Image of tree"/>
         {% else %}
-            <p>Image awaiting approval.</p>
+            {% if user.is_authenticated %}
+                <div class="alert alert-warning">
+                    <p class="mb-0">Please approve this image for public display.</p>
+                </div>
+                <img src="{{ MEDIA_URL }}{{ data.image }}" class="img-fluid img-thumbnail img-resize" alt="Image of tree"/>
+            {% else %}
+                <div class="alert alert-info">
+                    <p class="mb-0">Image is awaiting approval.</p>
+                </div>
+            {% endif %}
         {% endif %}
-        </div>
+    {% endif %}
+    </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        var map;
-        function initMap() {
-            let loc = {lat: {{ data.loc_lat }}, lng: {{ data.loc_lng }} }
-            map = new google.maps.Map(document.getElementById('detail-map'), {
-                center: loc,
-                zoom: 8
-            });
-            let marker = new google.maps.Marker({
-                position: loc,
-                map: map,
-                title: 'Observation {{ data.id }}'
-            });
-        }
-    </script>
+    <script src="{% static 'js/detail.js' %}" type="application/javascript"></script>
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWtjXWbdncfXHq3RdeWGSn68eVlmR-wf8&callback=initMap">
     </script>
+    {% if user.is_authenticated %}
+        <script src="{% static 'js/detail-admin.js' %}" type="application/javascript"></script>
+    {% endif %}
 {% endblock %}

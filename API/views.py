@@ -116,7 +116,7 @@ def approve_image(request, inc_id):
             return http.HttpResponseNotFound()
         inc.image_apr = not inc.image_apr
         inc.save()
-        return http.JsonResponse({'image_apr': inc.image_apr})
+        return http.JsonResponse({'img_apr': inc.image_apr})
 
 
 @require_POST
@@ -131,4 +131,4 @@ def verify(request, inc_id):
         inc.verified = not inc.verified
         inc.verified_by = request.user.username
         inc.save()
-        return http.JsonResponse({'verified': inc.verified})
+        return http.JsonResponse({'verified': inc.verified, 'verified_by': request.user.username})
