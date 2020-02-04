@@ -138,13 +138,18 @@ $(document).ready(function() {
         } else {
             let file = e.target.files[0];
             app.view.form.loc_search_container.addClass('d-none');
+            app.view.form.date.addClass('form-control-plaintext');
+            app.view.form.date.removeClass('form-control');
             app.view.form.clearFields();
             app.view.form.enableFields();
             EXIF.getData(file, function() {
                 let data = this.exifdata;
                 // Check if it has Date/Time
-                if (data.hasOwnProperty('DateTime')) {
+                if (hasAllProperties(data, ['DateTime'])) {
                     app.view.form.date.val(ConvertEXIFDateToISO(data.DateTime))
+                } else {
+                    app.view.form.date.removeClass('form-control-plaintext');
+                    app.view.form.date.addClass('form-control');
                 }
                 if (hasAllProperties(data, ['GPSLatitude','GPSLatitudeRef','GPSLongitude','GPSLongitudeRef'])) {
                     let gps = getGPSFromEXIF(data)
