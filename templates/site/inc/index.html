@@ -1,6 +1,30 @@
 {% extends "includes/base.html" %}
 
+{% block meta %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css"/>
+{% endblock %}
+
 {% block content %}
-<h3>This is the incidental index page</h3>
-    <p>Sample text</p>
+    <table id="inc_table" class="table table-bordered table-sm" style="width:100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Verified</th>
+            </tr>
+        </thead>
+    </table>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+<script>
+    $('#inc_table').DataTable({
+       "processing": true,
+       "serverSide": true,
+       "ajax": "{% url 'api:inc_dt' %}"
+    });
+</script>
 {% endblock %}

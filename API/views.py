@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.views.decorators.http import require_POST
+from django_datatables_view.base_datatable_view import BaseDatatableView
 
 
 class IndexView(generic.View):
@@ -132,3 +133,9 @@ def verify(request, inc_id):
         inc.verified_by = request.user.username
         inc.save()
         return http.JsonResponse({'verified': inc.verified, 'verified_by': request.user.username})
+
+
+class IncidentalListJson(BaseDatatableView):
+    model = Incidental
+    columns = ['id', 'date_obs', 'loc_lat', 'loc_lng', 'verified']
+    order_columns = ['id', 'date_obs', '', '', 'verified']
