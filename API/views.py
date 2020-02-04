@@ -9,6 +9,8 @@ from django.urls import reverse
 from django.views.decorators.http import require_POST
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from .lib import random_data
+from Snowgum import settings
+
 
 class IndexView(generic.View):
     def get(self, request):
@@ -143,20 +145,22 @@ class IncidentalListJson(BaseDatatableView):
 
 @login_required()
 def factory(request, number):
-
-    for i in range(number):
-        inc = Incidental()
-        data = random_data()
-        inc.date_obs = data.get('date_obs')
-        inc.description = data.get('description')
-        inc.email = data.get('email')
-        inc.loc_lat = data.get('loc_lat')
-        inc.loc_lng = data.get('loc_lng')
-        inc.contact = data.get('contact')
-        inc.image = data.get('image')
-        inc.image_apr = data.get('image_apr')
-        inc.verified = data.get('verified')
-        inc.verified_by = data.get('verified_by')
-        inc.entered_IP = data.get('entered_IP')
-        inc.save()
-    return http.HttpResponse(str(number) + " incidental objects added")
+    if not settings.DEBUG:
+        return http.HttpResponseForbidden()
+    else:
+        for i in range(number):
+            inc = Incidental()
+            data = random_data()
+            inc.date_obs = data.get('date_obs')
+            inc.description = data.get('description')
+            inc.email = data.get('email')
+            inc.loc_lat = data.get('loc_lat')
+            inc.loc_lng = data.get('loc_lng')
+            inc.contact = data.get('contact')
+            inc.image = data.get('image')
+            inc.image_apr = data.get('image_apr')
+            inc.verified = data.get('verified')
+            inc.verified_by = data.get('verified_by')
+            inc.entered_IP = data.get('entered_IP')
+            inc.save()
+        return http.HttpResponse(str(number) + " incidental objects added")
