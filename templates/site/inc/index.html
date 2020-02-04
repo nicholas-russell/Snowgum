@@ -11,7 +11,7 @@
             <table id="inc_table" class="table table-bordered table-sm" style="width:100%">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>ID/Link</th>
                         <th>Date</th>
                         <th>Latitude</th>
                         <th>Longitude</th>
@@ -39,9 +39,25 @@
 <script>
     $(document).ready(function() {
         $('#inc_table').DataTable({
-           "processing": true,
-           "serverSide": true,
-           "ajax": "{% url 'api:inc_dt' %}"
+            "deferRender": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": "{% url 'api:inc_dt' %}",
+            columnDefs: [{
+                targets: 0, //<-- index of column that should be rendered as link
+                render : function(data, type, row, meta){
+                    if (type === 'display'){
+                        return $('<a>')
+                            .attr('href', data)
+                             .text("View #" + data)
+                             .wrap('<div></div>')
+                             .parent()
+                             .html();
+                    } else {
+                        return data;
+                    }
+                }
+            }]
         });
     });
 
