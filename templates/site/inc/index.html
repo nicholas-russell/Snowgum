@@ -67,10 +67,6 @@
            content: 'test'
         });
         {% for inc in data %}
-            var content{{ inc.id }} = '{{ inc.date_obs }}';
-            var infoWindow{{ inc.id }} = new google.maps.InfoWindow({
-                content: content{{ inc.id }}
-            });
             var marker{{ inc.id }} = new google.maps.Marker({
                 position: {lat: {{ inc.loc_lat }}, lng: {{ inc.loc_lng }}},
                 map: markerMap,
