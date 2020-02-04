@@ -9,5 +9,6 @@ urlpatterns = [
     path('inc/<int:inc_id>/approve-image', views.approve_image, name='inc_apr_img'),
     path('inc/<int:inc_id>/verify', views.verify, name='inc_verify'),
     path('inc/dt', views.IncidentalListJson.as_view(), name='inc_dt'),
-    path('auth/', views.AuthView.as_view())
+    path('auth/', views.AuthView.as_view()),
+    path('factory/<int:number>', views.factory)
 ]
