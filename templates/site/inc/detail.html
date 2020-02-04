@@ -1,28 +1,38 @@
 {% extends "includes/base.html" %}
-
 {% block content %}
 <div class="row">
     <div class="col-6">
         <div class="card">
             <div class="card-header">
-                <h5><strong>Observation #{{ data.id }}</strong></h5>
+                <h5 class="m-0"><strong>Observation #{{ data.id }}</strong></h5>
             </div>
             <div class="card-body">
                 <p><strong>Date Observed: </strong>{{ data.date_obs }}</p>
                 <p><strong>Submitted: </strong>{{ data.ts_entered|date:"g:i:sA D d/m/y" }}</p>
                 <p><strong>Description: </strong> {{ data.description }}</p>
+                <p>
+                    <strong>Verified: </strong>
+                    {{ data.verified }}
+                    {% if data.verified %}
+                    ({{ data.verified_by }})
+                    {% endif %}
+                </p>
+                {% if user.is_authenticated %}
                 <p><strong>Email: </strong>{{ data.email }} ({{ data.contact }})</p>
-                <p><strong>Verified: </strong>{{ data.verified }}</p>
-                <p><strong>Verified by: </strong>{{ data.verified_by }}</p>
-                <p><strong>Image approved: </strong>{{ data.image_apr }}</p>
+                <p><strong>IP Address: </strong>{{ data.entered_IP }}</p>
+                {% endif %}
                 <p><strong>Location: </strong>{{ data.loc_lat }}, {{ data.loc_lng }}</p>
                 <div id="detail-map"></div>
             </div>
         </div>
     </div>
     <div class="col-6">
-        <img src="{{ MEDIA_URL }}{{ data.image }}" class="img-fluid img-thumbnail img-resize" alt="Image of tree"/>
-    </div>
+        {% if data.image_apr %}
+            <img src="{{ MEDIA_URL }}{{ data.image }}" class="img-fluid img-thumbnail img-resize" alt="Image of tree"/>
+        {% else %}
+            <p>Image awaiting approval.</p>
+        {% endif %}
+        </div>
 </div>
 {% endblock %}
 
