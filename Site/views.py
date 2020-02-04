@@ -1,6 +1,6 @@
 from API.models import Incidental
 from django.views.decorators.http import require_http_methods
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 
 @require_http_methods(['GET'])
@@ -40,4 +40,6 @@ class IncView:
 
     @require_http_methods(['GET'])
     def detail(request, inc_id):
-        return render(request, 'site/inc/detail.html')
+        inc = get_object_or_404(Incidental, pk=inc_id)
+        print(inc)
+        return render(request, 'site/inc/detail.html', {'data': inc})
