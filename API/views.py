@@ -4,7 +4,9 @@ from django.views import generic
 from ipware import get_client_ip
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from django.views.decorators.http import require_POST
 
 
 class IndexView(generic.View):
@@ -59,20 +61,11 @@ class IndexView(generic.View):
             return http.JsonResponse({'redirect': reverse('site:inc_detail', args=(new.id,))})
 
 
-
 class DetailView(generic.View):
     def get(self, request, inc_id):
         """Get detail of individual incidental"""
         try:
-            obj = Incidental.objects.values("pk",
-                                            "date_obs",
-                                            "description",
-                                            "loc_lat",
-                                            "loc_lng",
-                                            "verified",
-                                            "ts_entered",
-                                            "ts_updated",
-                                            "image").get(pk=inc_id)
+            obj = Incidental.objects.get(pk=inc_id)
         except Incidental.DoesNotExist:
             return http.HttpResponseNotFound()
         return http.JsonResponse({'data': obj})
@@ -110,3 +103,32 @@ class AuthView(generic.View):
             return http.HttpResponse("Success")
         else:
             return http.HttpResponseBadRequest("Not success")
+
+
+@require_POST
+def approve_image(request, inc_id):
+    if not request.user.is_authenticated:
+        return http.HttpResponse(status=401)
+    else:
+        try:
+            inc = Incidental.objects.get(pk=inc_id)
+        except Incidental.DoesNotExist:
+            return http.HttpResponseNotFound()
+        inc.image_apr = not inc.image_apr
+        inc.save()
+        return http.JsonResponse({'image_apr': inc.image_apr})
+
+
+@require_POST
+def verify(request, inc_id):
+    if not request.user.is_authenticated:
+        return http.HttpResponse(status=401)
+    else:
+        try:
+            inc = Incidental.objects.get(pk=inc_id)
+        except Incidental.DoesNotExist:
+            return http.HttpResponseNotFound()
+        inc.verified = not inc.verified
+        inc.verified_by = request.user.username
+        inc.save()
+        return http.JsonResponse({'verified': inc.verified})
