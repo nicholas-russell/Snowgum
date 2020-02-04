@@ -36,7 +36,8 @@ def report(request):
 class IncView:
     @require_http_methods(['GET'])
     def index(request):
-        return render(request, 'site/inc/index.html')
+        inc = Incidental.objects.all()
+        return render(request, 'site/inc/index.html', {'data': inc})
 
     @require_http_methods(['GET'])
     def detail(request, inc_id):

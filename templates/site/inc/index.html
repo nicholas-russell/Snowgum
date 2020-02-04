@@ -5,26 +5,96 @@
 {% endblock %}
 
 {% block content %}
-    <table id="inc_table" class="table table-bordered table-sm" style="width:100%">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Date</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-                <th>Verified</th>
-            </tr>
-        </thead>
-    </table>
+    <div class="row">
+        <div class="col">
+            <h5>Datatable</h5>
+            <table id="inc_table" class="table table-bordered table-sm" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Verified</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <h5>Heat Map</h5>
+            <div id="heatmap" class="map"></div>
+        </div>
+        <div class="col-6">
+            <h5>Marker Map</h5>
+            <div id="markermap" class="map"></div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block scripts %}
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
 <script>
-    $('#inc_table').DataTable({
-       "processing": true,
-       "serverSide": true,
-       "ajax": "{% url 'api:inc_dt' %}"
+    $(document).ready(function() {
+        $('#inc_table').DataTable({
+           "processing": true,
+           "serverSide": true,
+           "ajax": "{% url 'api:inc_dt' %}"
+        });
     });
+
+    var heatMap, heatMapLayer, markerMap;
+    function initMaps() {
+        heatMap = new google.maps.Map(document.getElementById('heatmap'), {
+            zoom: 5,
+            center: {lat: -36.147610, lng: 148.486672},
+            mapTypeControl: true,
+            mapTypeId: 'terrain'
+        });
+        heatMapLayer = new google.maps.visualization.HeatmapLayer({
+           data: getPointsForHeatMap(),
+           map: heatMap
+        });
+        markerMap = new google.maps.Map(document.getElementById('markermap'), {
+            zoom: 5,
+            center: {lat: -36.147610, lng: 148.486672},
+            mapTypeId: 'satellite',
+            mapTypeControl: true
+        });
+        var infoWindow = new google.maps.InfoWindow({
+           content: 'test'
+        });
+        {% for inc in data %}
+            var content{{ inc.id }} = '{{ inc.date_obs }}';
+            var infoWindow{{ inc.id }} = new google.maps.InfoWindow({
+                content: content{{ inc.id }}
+            });
+            var marker{{ inc.id }} = new google.maps.Marker({
+                position: {lat: {{ inc.loc_lat }}, lng: {{ inc.loc_lng }}},
+                map: markerMap,
+                title: 'Observation {{ inc.id }}'
+            });
+            marker{{ inc.id }}.addListener('click', function() {
+                infoWindow.setContent(
+                    '<p class="m-0"><strong>Observation #{{ inc.id }}</strong></p>' +
+                    '<p class="m-0">{{ inc.date_obs }}</p>' +
+                    '<a href={% url 'site:inc_detail' inc.id %}>View</a>'
+                );
+                infoWindow.open(markerMap, marker{{ inc.id }});
+            });
+        {% endfor %}
+    }
+    function getPointsForHeatMap() {
+        return [
+            {% for inc in data %}
+            new google.maps.LatLng({{ inc.loc_lat }}, {{ inc.loc_lng }}),
+            {% endfor %}
+        ]
+    }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWtjXWbdncfXHq3RdeWGSn68eVlmR-wf8&libraries=visualization&callback=initMaps">
 </script>
 {% endblock %}
