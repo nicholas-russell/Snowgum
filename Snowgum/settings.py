@@ -125,7 +125,7 @@ USE_TZ = True
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
-STATIC_ROOT = ''
+STATIC_ROOT = 'static/'
 
 STATIC_URL = "/resources/"
 
