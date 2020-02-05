@@ -1,5 +1,5 @@
 """
-WSGI config for Snowgum project.
+WSGI config for Snowgum project
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
