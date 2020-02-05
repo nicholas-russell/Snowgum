@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# ALLOWED_HOSTS = ['localhost','165.22.62.47']
 
 # Application definition
 
@@ -127,7 +128,7 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 STATIC_ROOT = 'static/'
 
-STATIC_URL = "/resources/"
+STATIC_URL = "/static/"
 
 # STATICFILES_DIRS = (
 #    os.path.join(BASE_DIR, 'static/'),
