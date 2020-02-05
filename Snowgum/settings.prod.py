@@ -21,13 +21,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+# SECRET_KEY = "abcd12345"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
-
-# ALLOWED_HOSTS = ['localhost','165.22.62.47']
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','165.22.62.47']
 
 # Application definition
 
@@ -79,8 +79,11 @@ WSGI_APPLICATION = 'Snowgum.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'snowgum_db.sqlite3'
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'snowgum',
+        'USER': 'snowgum_dbuser',
+        'PASSWORD': os.environ['DB_PASSWORD'],
+        'HOST': 'localhost'
     }
 }
 
@@ -123,7 +126,7 @@ USE_TZ = True
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
-STATIC_ROOT = ''
+STATIC_ROOT = '/var/www/snowgum/static/'
 
 STATIC_URL = "/static/"
 
