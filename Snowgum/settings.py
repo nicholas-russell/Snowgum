@@ -125,9 +125,9 @@ USE_TZ = True
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
-STATIC_ROOT = ''
+STATIC_ROOT = '/var/www/snowgum/static'
 
-STATIC_URL = "/static/"
+STATIC_URL = "/resources/"
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static/'),
