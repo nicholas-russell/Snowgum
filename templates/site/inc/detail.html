@@ -1,5 +1,6 @@
 {% extends "includes/base.html" %}
 {% load static %}
+{% block title %}Inc #{{ data.id }} | Snowgum Dieback{% endblock %}
 {% block meta %}
     {% if user.is_authenticated %}
         <meta name="api-endpoint-apr-img" content="{% url 'api:inc_apr_img' data.id %}"/>

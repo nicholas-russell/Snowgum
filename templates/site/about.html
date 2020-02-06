@@ -1,6 +1,43 @@
 {% extends "includes/base.html" %}
-
+{% load static %}
+{% block title %}About | Snowgum Dieback{% endblock %}
 {% block content %}
-<h3>This is the about page</h3>
-    <p>Sample text</p>
+    <h3>About</h3>
+    <div class="row">
+        <div class="col">
+            <figure class="figure float-right ml-2">
+                <img src="{% static "img/examples/example2.jpg"%}" class="figure-img img-fluid rounded" width="400px"/>
+                <figcaption class="figure-caption">Duis commodo tristique magna,</figcaption>
+            </figure>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eu nunc consequat, egestas est eu, finibus dui.
+                Nullam posuere sodales vehicula. Aliquam egestas mi rhoncus congue cursus. Aenean porta hendrerit ultricies.
+                Nullam finibus sapien mi, sed tempus nunc porta sed. Pellentesque eget bibendum quam. Sed feugiat ligula eget
+                dui facilisis facilisis id vestibulum lacus. Duis commodo tristique magna, eu mollis enim elementum sit amet.
+                Nam a ex placerat, interdum quam eu, tempus quam. Praesent pulvinar scelerisque mauris, in ornare sapien pretium
+                nec. Pellentesque placerat volutpat metus ut ullamcorper. Praesent a dui vel ipsum congue sollicitudin et vel
+                quam. Praesent ac nulla id orci iaculis luctus. Aenean sed posuere eros.
+            </p>
+            <p>
+                Quisque id orci nec lectus porta ultrices. Proin et lacus lectus. Maecenas vel velit vitae nulla maximus
+                consequat. Nam sed sapien non erat aliquam eleifend. Morbi in ultricies magna. Vestibulum hendrerit
+                sodales justo. Morbi vitae odio pulvinar, hendrerit nisl ac, efficitur libero. Curabitur nisi elit,
+                euismod eu dictum sed, pretium id dui. Donec vulputate, dolor vel gravida interdum, turpis nunc porttitor
+                augue, sed ultricies tortor nisi et purus. Morbi tincidunt tincidunt massa, ut lacinia est mollis sit
+                amet. Donec gravida lorem a ex viverra, eu posuere leo dignissim. Praesent porta mauris eros, elementum
+                aliquam justo ultrices id. Donec commodo odio non tellus sodales egestas. Donec nec auctor mauris.
+            </p>
+            <figure class="figure float-right ml-2">
+                <img src="{% static "img/examples/example3.jpg"%}" class="figure-img img-fluid rounded" width="400px"/>
+                <figcaption class="figure-caption">Duis commodo tristique magna,</figcaption>
+            </figure>
+            <p>
+                Praesent pharetra ac ante nec ultrices. Maecenas at lorem dui. Integer pulvinar nulla vel elit accumsan
+                commodo. Suspendisse porta nisi eu purus tincidunt vehicula. Suspendisse quis vulputate nibh. Quisque
+                imperdiet nunc at felis dignissim, sit amet tincidunt lectus ornare. Morbi at elit odio. Mauris sit amet
+                sapien nec lorem convallis venenatis.
+            </p>
+        </div>
+    </div>
+
 {% endblock %}

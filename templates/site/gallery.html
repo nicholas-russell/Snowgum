@@ -1,6 +1,21 @@
 {% extends "includes/base.html" %}
-
+{% load static %}
+{% block title %}Gallery | Snowgum Dieback{% endblock %}
 {% block content %}
-<h3>This is the gallery page</h3>
-    <p>Sample text</p>
+    <h3>Gallery</h3>
+    <div class="row">
+        <div class="col-sm-4">
+            <img src="{% static "img/examples/example1.jpg"%}" alt="Example Image" class="img-thumbnail my-1"/>
+            <img src="{% static "img/examples/example6.jpg"%}" alt="Example Image" class="img-thumbnail my-1"/>
+        </div>
+        <div class="col-sm-4">
+            <img src="{% static "img/examples/example2.jpg"%}" alt="Example Image" class="img-thumbnail my-1"/>
+            <img src="{% static "img/examples/example5.jpg"%}" alt="Example Image" class="img-thumbnail my-1"/>
+        </div>
+        <div class="col-sm-4">
+            <img src="{% static "img/examples/example3.jpg"%}" alt="Example Image" class="img-thumbnail my-1"/>
+            <img src="{% static "img/examples/example4.jpg"%}" alt="Example Image" class="img-thumbnail my-1"/>
+        </div>
+
+    </div>
 {% endblock %}

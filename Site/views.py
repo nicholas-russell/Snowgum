@@ -14,11 +14,6 @@ def about(request):
 
 
 @require_http_methods(['GET'])
-def data(request):
-    return render(request, 'site/data.html')
-
-
-@require_http_methods(['GET'])
 def gallery(request):
     return render(request, 'site/gallery.html')
 
